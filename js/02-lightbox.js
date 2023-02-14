@@ -16,3 +16,8 @@ const galleryListEl = galleryItems.map(({preview, original, description}) => {
 }).join('');
 
 wrapperEl.innerHTML = galleryListEl;
+
+const lightbox = new SimpleLightbox('.gallery a', { 
+  captionsData: 'alt',
+  captionPosition: 'bottom', 
+  captionDelay: 250 });
