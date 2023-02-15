@@ -1,11 +1,12 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
 console.log(galleryItems);
 
-const wrapperEl = document.querySelector('.gallery');
+const wrapperEl = document.querySelector(".gallery");
 
-const galleryListEl = galleryItems.map(({preview, original, description}) => {
+const galleryListEl = galleryItems
+  .map(({ preview, original, description }) => {
     return `
     <div class="gallery__item">
     <a class="gallery__link" href="${original}">
@@ -17,29 +18,35 @@ const galleryListEl = galleryItems.map(({preview, original, description}) => {
       />
     </a>
   </div>
-  `
-}).join('');
+  `;
+  })
+  .join("");
 
 wrapperEl.innerHTML = galleryListEl;
 
-wrapperEl.addEventListener('click', showClickImg);
+wrapperEl.addEventListener("click", showClickImg);
 
 function showClickImg(evt) {
-    evt.preventDefault();
+  evt.preventDefault();
 
-    if (evt.target.nodeName !== 'IMG') {
-        return;
+  if (evt.target.nodeName !== "IMG") {
+    return;
+  }
+
+  const instance = basicLightbox.create(
+    `
+    <img src="${evt.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: () => document.addEventListener("keydown", onCloseModal),
+      onClose: () => document.removeEventListener("keydown", onCloseModal),
     }
+  );
 
-    const instance = basicLightbox.create(`
-    <img src="${evt.target.dataset.source}" width="800" height="600">
-`)
+  instance.show();
 
-instance.show()
-
-wrapperEl.addEventListener('keydown', evt => {
-    if (evt.code === 'Escape') {
-        instance.close()
+  function onCloseModal(evt) {
+    if (evt.code === "Escape") {
+      instance.close();
     }
-})
+  }
 }
